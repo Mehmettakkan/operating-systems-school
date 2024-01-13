@@ -14,20 +14,38 @@ public class HRRFScheduler {
             responseRatios[i] = (double) (processes[i].getBurstTime()) / (processes[i].getArrivalTime() + processes[i].getBurstTime());
         }
 
-        // Yanıt oranları en yüksek olan süreci bulun
+         // Yanıt oranları en yüksek olan süreci bulmak için kullanılacak olan indeks.
         int maxIndex;
+
+        // Süreçlerin sayısı kadar döngü yapılır.
         for (int i = 0; i < processes.length; i++) {
+
+            // Başlangıçta en yüksek yanıt oranına sahip sürecin indeksini, şu anki indeks olarak ayarla.
             maxIndex = i;
+
+            // İçteki döngü, dıştaki döngüde belirlenen süreci geride kalan süreçlerle karşılaştırır.
             for (int j = i + 1; j < processes.length; j++) {
+
+                // Eğer şu anki sürecin yanıt oranı, şu ana kadar bulunan en yüksek yanıt oranına sahip sürecin yanıt oranından büyükse,
                 if (responseRatios[j] > responseRatios[maxIndex]) {
+
+                    // En yüksek yanıt oranına sahip sürecin indeksini güncelle.
                     maxIndex = j;
                 }
             }
 
-            // En yüksek yanıt oranına sahip süreci sırala
+            // En yüksek yanıt oranına sahip süreci, şu anki döngüde belirlenen süreçle değiştir (sırala).
+            // Geçici bir değişken kullanarak iki süreci takas etmek için bu blok kullanılır.
+
+            // İki süreci takas etmek için bir geçici değişken oluştur.
             Process temp = processes[maxIndex];
+
+            // İlk süreci, diğer süreçle takas ederek sıralamayı gerçekleştirir.
             processes[maxIndex] = processes[i];
+
+            // İkinci süreci, geçici değişken içinde saklanan süreçle takas ederek sıralamayı tamamlar.
             processes[i] = temp;
+
 
             // Sürecin varış zamanını bekleme süresine ekleyin
             processes[i].setWaitingTime(processes[i].getArrivalTime());
